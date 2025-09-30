@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFMWakeUpHelper.Data", "GFMWakeUpHelper.Data\GFMWakeUpHelper.Data.csproj", "{AE210C6F-2DB7-4BB5-BD50-1AC88EF0E78C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFMWakeUpHelper.App", "GFMWakeUpHelper.App\GFMWakeUpHelper.App.csproj", "{1DEFEE97-4E96-4F70-B952-40E160AB0BE9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE210C6F-2DB7-4BB5-BD50-1AC88EF0E78C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE210C6F-2DB7-4BB5-BD50-1AC88EF0E78C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE210C6F-2DB7-4BB5-BD50-1AC88EF0E78C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE210C6F-2DB7-4BB5-BD50-1AC88EF0E78C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DEFEE97-4E96-4F70-B952-40E160AB0BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DEFEE97-4E96-4F70-B952-40E160AB0BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DEFEE97-4E96-4F70-B952-40E160AB0BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DEFEE97-4E96-4F70-B952-40E160AB0BE9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

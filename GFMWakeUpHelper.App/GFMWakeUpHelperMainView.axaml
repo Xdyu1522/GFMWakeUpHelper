@@ -1,0 +1,77 @@
+<sukiUi:SukiWindow xmlns="https://github.com/avaloniaui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+              xmlns:app="clr-namespace:GFMWakeUpHelper.App"
+              xmlns:global="clr-namespace:"
+              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+              x:Class="GFMWakeUpHelper.App.GFMWakeUpHelperMainView"
+              x:DataType="app:GFMWakeUpHelperMainViewModel"
+              Title="WakeUp管理终端"
+              BackgroundStyle="Bubble">
+        <sukiUi:SukiSideMenu IsSearchEnabled="True"
+                       ItemsSource="{Binding Pages}"
+                       SelectedItem="{Binding ActivePage}">
+        <sukiUi:SukiSideMenu.Styles>
+            <Style Selector="Image.AppIcon">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0.1" />
+                    </Transitions>
+                </Setter>
+                <Style Selector="^:pointerover">
+                    <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
+                </Style>
+            </Style>
+        </sukiUi:SukiSideMenu.Styles>
+            <sukiUi:SukiSideMenu.ItemTemplate>
+            <DataTemplate>
+                <sukiUi:SukiSideMenuItem Classes="Compact" Header="{Binding DisplayName}">
+                    <sukiUi:SukiSideMenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="{Binding Icon}" />
+                    </sukiUi:SukiSideMenuItem.Icon>
+                </sukiUi:SukiSideMenuItem>
+            </DataTemplate>
+        </sukiUi:SukiSideMenu.ItemTemplate>
+        <!--sukiUi:SukiSideMenu.HeaderContent>
+            <Image Width="80"
+                   Height="80"
+                   Margin="30,10,30,30"
+                   Classes="AppIcon"
+                   IsVisible="{Binding $parent[sukiUi:SukiWindow].((app:GFMWakeUpHelperMainView)DataContext).TitleBarVisible}"
+                   PointerPressed="InputElement_OnPointerPressed"
+                   Source="Assets/OIG.N5o-removebg-preview.png"
+                   ToolTip.Tip="Click To Toggle Top Menu." />
+        </sukiUi:SukiSideMenu.HeaderContent-->
+        <!--<sukiUi:SukiSideMenu.FooterContent>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Command" Value="{Binding OpenUrlCommand}" />
+                    </Style>
+                    <Style Selector="avalonia|MaterialIcon">
+                        <Setter Property="Width" Value="25" />
+                        <Setter Property="Height" Value="25" />
+                    </Style>
+                </StackPanel.Styles>
+                <Button Classes="Basic"
+                        CommandParameter="https://github.com/kikipoulet/SukiUI"
+                        ToolTip.Tip="Open On GitHub.">
+                    <avalonia:MaterialIcon Kind="Github" />
+                </Button>
+                <Button Classes="Basic"
+                        CommandParameter="https://www.nuget.org/packages/SukiUI"
+                        ToolTip.Tip="View On NuGet.">
+                    <avalonia:MaterialIcon Kind="Package" />
+                </Button>
+                <Button Classes="Basic"
+                        CommandParameter="https://github.com/kikipoulet/CherylUI"
+                        ToolTip.Tip="CheryUI - For Mobile">
+                    <avalonia:MaterialIcon Kind="Cat" />
+                </Button>
+        </StackPanel>
+         </sukiUi:SukiSideMenu.FooterContent>-->
+    </sukiUi:SukiSideMenu>
+</sukiUi:SukiWindow>

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="WakeUpHelperData" uuid="2d90bd64-90ba-486c-b4f1-6ae09dc4d14a">
+    <data-source source="LOCAL" name="WakeUpHelperData.db" uuid="bd16b67e-13a3-4a24-b100-0c48742d13f7">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Programmes\CS\GFMWakeUpHelper\GFMWakeUpHelper.Data\WakeUpHelperData.db</jdbc-url>
-      <jdbc-additional-properties>
-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
-      </jdbc-additional-properties>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/GFMWakeUpHelper.App/bin/Debug/net9.0/AppData/WakeUpHelperData.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

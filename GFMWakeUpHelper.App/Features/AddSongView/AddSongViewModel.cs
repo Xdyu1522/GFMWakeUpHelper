@@ -16,15 +16,17 @@ using SukiUI.MessageBox;
 
 namespace GFMWakeUpHelper.App.Features.AddSongView;
 
-public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogManager dialogManager) : PageBase("添加歌曲", MaterialIconKind.Abc, int.MinValue)
+public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogManager dialogManager)
+    : PageBase("添加歌曲", MaterialIconKind.Abc, int.MinValue)
 {
     public ObservableCollection<Song> Songs { get; } = new();
-    
+
     private string _inputSongText = string.Empty;
+
     public string InputSongText
     {
         get => _inputSongText;
-        set 
+        set
         {
             if (SetProperty(ref _inputSongText, value))
             {
@@ -33,10 +35,10 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
             }
         }
     }
-    
+
     private readonly DataDbContext _dbContext = new();
     private readonly ISukiDialogManager _dialogManager = dialogManager;
-    
+
     private void ParseInputText()
     {
         if (string.IsNullOrWhiteSpace(InputSongText))
@@ -44,7 +46,7 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
             Songs.Clear();
             return;
         }
-        
+
         var lines = InputSongText.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         var parsedSongs = lines.Select((line, index) =>
         {
@@ -53,8 +55,8 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
             song.RequestedAt = DateTime.Now;
             song.IsActive = true;
             return song;
-        }).ToList();
-        
+        }).Where(x => !(string.IsNullOrEmpty(x.Title) || x.Artists.Count == 0)).ToList();
+
         // 更新Songs集合
         Songs.Clear();
         foreach (var song in parsedSongs)
@@ -68,13 +70,13 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
     {
         if (string.IsNullOrWhiteSpace(InputSongText))
             return;
-            
+
         try
         {
             var parseResult = InputSongText.Split("\n", StringSplitOptions.RemoveEmptyEntries)
                 .Select(ParseSongLine)
                 .ToList();
-            
+
             // 设置歌曲的其他属性
             var currentBatch = (_dbContext.Songs.Any() ? _dbContext.Songs.Max(s => s.Batch) : 0) + 1;
             var currentTime = DateTime.Now;
@@ -84,11 +86,11 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
                 song.IsActive = true;
                 song.Batch = currentBatch;
             }
-            
+
             // 先找出没有重名的歌曲并添加
             var songsToAdd = new List<Song>();
             var songsWithSameName = new Dictionary<string, List<Song>>();
-            
+
             foreach (var song in parseResult)
             {
                 // 使用 EF Core 支持的方式进行不区分大小写比较
@@ -106,17 +108,18 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
                     {
                         songsWithSameName[song.Title] = new List<Song>();
                     }
+
                     songsWithSameName[song.Title].Add(song);
                 }
             }
-            
+
             // 先添加所有没有重名的歌曲
             if (songsToAdd.Any())
             {
                 _dbContext.Songs.AddRange(songsToAdd);
                 await _dbContext.SaveChangesAsync();
             }
-            
+
             // 处理有重名的歌曲
             foreach (var songTitle in songsWithSameName.Keys)
             {
@@ -125,7 +128,7 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
                 // 使用 EF Core 支持的方式进行不区分大小写比较
                 var lowerSongTitle = songTitle.ToLower();
                 var existingSongs = _dbContext.Songs.Where(s => s.Title.ToLower() == lowerSongTitle).ToList();
-                
+
                 // 合并两个列表显示给用户
                 var allSongs = new List<Song>();
                 allSongs.AddRange(existingSongs);
@@ -134,36 +137,36 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
                 var result = await ShowAskSameSongMessageBox(allSongs);
                 switch (result)
                 {
-                    case SukiMessageBoxResult.Cancel: 
+                    case SukiMessageBoxResult.Cancel:
                         Console.WriteLine("Canceled.");
                         await _dbContext.Songs.AddRangeAsync(pendingSongs);
                         break;
-                    case SukiMessageBoxResult.No: 
+                    case SukiMessageBoxResult.No:
                         Console.WriteLine("No.");
                         await _dbContext.Songs.AddRangeAsync(pendingSongs);
                         break;
-                    case SukiMessageBoxResult.Yes: Console.WriteLine("Yes.");
+                    case SukiMessageBoxResult.Yes:
+                        Console.WriteLine("Yes.");
                         break;
                 }
 
                 Console.WriteLine($"显示同名歌曲对话框: {songTitle}, 共 {allSongs.Count} 首歌曲，对话框显示结果: {result}");
             }
-            
+
             // 成功提示
             InputSongText = string.Empty;
             Console.WriteLine($"成功添加 {songsToAdd.Count} 首歌曲到数据库，有 {songsWithSameName.Count} 组同名歌曲需要处理");
-            
-        } 
+        }
         catch (Exception ex)
         {
             Console.WriteLine($"提交失败: {ex.Message}");
         }
     }
-    
+
     private static async Task<object?> ShowAskSameSongMessageBox(IEnumerable<Song> allSongs)
     {
         var dataContext = new AskSameSongDialogViewModel(new SukiDialog(), allSongs);
-    
+
         var result = await SukiMessageBox.ShowDialog(new SukiMessageBoxHost
             {
                 IconPreset = SukiMessageBoxIcons.Question,
@@ -179,7 +182,7 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
                 IsTitleBarVisible = false,
                 CanResize = false
             });
-    
+
 
         return result;
     }

@@ -10,5 +10,7 @@ public partial class GFMWakeUpHelperMainView : SukiWindow
     public GFMWakeUpHelperMainView()
     {
         InitializeComponent();
+        Width = 1200;
+        Height = 700;
     }
 }

@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sukiUi="https://github.com/kikipoulet/SukiUI"
+             xmlns:askSameSongDialog="clr-namespace:GFMWakeUpHelper.App.Dialogs.AskSameSongDialog"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GFMWakeUpHelper.App.Dialogs.AskSameSongDialog.AskSameSongDialog"
+             x:DataType="askSameSongDialog:AskSameSongDialogViewModel">
+    <sukiUi:GroupBox Header="{Binding DialogTitle}">
+        <StackPanel Spacing="15">
+            <TextBlock Text="请从下面的数据中进行选择：" />
+            
+            <DataGrid ItemsSource="{Binding PendingSongs}"
+                      Height="300"
+                      CanUserResizeColumns="True"
+                      GridLinesVisibility="All">
+                <DataGrid.Columns>
+                    <!-- 定义你的列 -->
+                    <DataGridTextColumn Header="歌手" Binding="{Binding Artists, Converter={StaticResource ListStringToVisibilityConverter}}" />
+                    <DataGridTextColumn Header="标题" Binding="{Binding Title}" />
+                    <DataGridTextColumn Header="批次" Binding="{Binding Batch}" />
+                    <DataGridTextColumn Header="创建时间" Binding="{Binding RequestedAt, Converter={StaticResource DateTimeToVisibilityConverter}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <!--<StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right" 
+                        Spacing="10">
+                <Button Content="是" 
+                        Command="{Binding YesCommand}"
+                        Classes="Accent" />
+                <Button Content="否" 
+                        Command="{Binding NoCommand}"
+                        Classes="Basic" />
+                <Button Content="取消" 
+                        Command="{Binding CancelCommand}"
+                        Classes="Flat" />
+            </StackPanel>-->
+        </StackPanel>
+    </sukiUi:GroupBox>
+</UserControl>

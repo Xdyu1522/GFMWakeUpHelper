@@ -2,9 +2,79 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:addsong="clr-namespace:GFMWakeUpHelper.App.Features.AddSongView"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:addSong="clr-namespace:GFMWakeUpHelper.App.Features.AddSongView"
+             xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+             xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:Class="GFMWakeUpHelper.App.Features.AddSongView.AddSongView"
-             >
-    欢迎来到WakeUp管理终端
+             x:DataType="addSong:AddSongViewModel">
+    <Grid x:Name="BaseGrid" Margin="20">
+        <!-- 标题区域 -->
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 20">
+                <materialIcons:MaterialIcon Kind="Music" Margin="0 0 10 0" />
+                <TextBlock Text="GFM 点歌助手" FontSize="36" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <!-- 主内容区域 -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- 左侧文本框 -->
+                <sukiUi:GlassCard Grid.Row="0" Grid.Column="0" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="输入点歌列表" FontSize="16" FontWeight="SemiBold" Margin="0 0 0 8"/>
+                        <TextBox 
+                            AcceptsReturn="True" 
+                            Text="{Binding InputSongText, Mode=TwoWay}"
+                            MinHeight="400"
+                            Watermark="请输入歌曲列表，格式：歌曲名 - 艺术家名"
+                            TextWrapping="Wrap"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Classes="Filled"/>
+                        <TextBlock Text="示例：夜曲 - 周杰伦" FontSize="12" Foreground="#888" Margin="0 8 0 0"/>
+                    </StackPanel>
+                </sukiUi:GlassCard>
+                
+                <!-- 右侧DataGrid -->
+                <sukiUi:GlassCard Grid.Row="0" Grid.Column="2" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="解析结果" FontSize="16" FontWeight="SemiBold" Margin="0 0 0 8"/>
+                        <dg:DataGrid 
+                            ItemsSource="{Binding Songs}" 
+                            MinHeight="400"
+                            AutoGenerateColumns="False">
+                            <dg:DataGrid.Columns>
+                                <dg:DataGridTextColumn Header="序号" Width="60" Binding="{Binding Id}"/>
+                                <dg:DataGridTextColumn Header="歌曲名" Width="*" Binding="{Binding Title}"/>
+                                <dg:DataGridTextColumn Header="艺术家" Width="*" Binding="{Binding Artists, Converter={StaticResource ListStringToVisibilityConverter}}"/>
+                            </dg:DataGrid.Columns>
+                        </dg:DataGrid>
+                    </StackPanel>
+                </sukiUi:GlassCard>
+                
+                <!-- 应用按钮 -->
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 20 0 0" Spacing="10">
+                    <Button 
+                        Command="{Binding SubmitCommand}"
+                        Content="应用点歌" 
+                        Classes="Flat"
+                        Width="120">
+                        <!-- <sukiUi:SukiButton.Icon>
+                            <materialIcons:MaterialIcon Kind="Check"/>
+                        </sukiUi:SukiButton.Icon> -->
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
 </UserControl>

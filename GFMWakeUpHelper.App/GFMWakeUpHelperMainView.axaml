@@ -6,14 +6,15 @@
               xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
               xmlns:app="clr-namespace:GFMWakeUpHelper.App"
               xmlns:global="clr-namespace:"
-              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
               x:Class="GFMWakeUpHelper.App.GFMWakeUpHelperMainView"
               x:DataType="app:GFMWakeUpHelperMainViewModel"
               Title="WakeUp管理终端"
               BackgroundStyle="Bubble">
         <sukiUi:SukiSideMenu IsSearchEnabled="True"
                        ItemsSource="{Binding Pages}"
-                       SelectedItem="{Binding ActivePage}">
+                       SelectedItem="{Binding ActivePage}"
+                       Content="{Binding ActivePage}">
         <sukiUi:SukiSideMenu.Styles>
             <Style Selector="Image.AppIcon">
                 <Setter Property="Transitions">
@@ -73,5 +74,6 @@
                 </Button>
         </StackPanel>
          </sukiUi:SukiSideMenu.FooterContent>-->
+        <!-- 添加SukiDialogHost以支持对话框显示 -->
     </sukiUi:SukiSideMenu>
 </sukiUi:SukiWindow>

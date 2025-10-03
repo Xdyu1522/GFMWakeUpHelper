@@ -8,12 +8,14 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 using GFMWakeUpHelper.App.Common;
+using GFMWakeUpHelper.App.Dialogs.AskSameSongDialog;
 using GFMWakeUpHelper.App.Features;
 using GFMWakeUpHelper.App.Features.AddSongView;
 using GFMWakeUpHelper.App.Features.SongManageView;
 using GFMWakeUpHelper.App.Services;
 using GFMWakeUpHelper.Data;
 using Microsoft.Extensions.DependencyInjection;
+using SukiUI.Dialogs;
 
 namespace GFMWakeUpHelper.App;
 
@@ -67,16 +69,21 @@ public partial class App : Application
 
     private static SukiViews ConfigureViews(ServiceCollection services)
     {
+        // 然后注册视图和视图模型
         return new SukiViews()
             .AddView<GFMWakeUpHelperMainView, GFMWakeUpHelperMainViewModel>(services)
             .AddView<AddSongView, AddSongViewModel>(services)
-            .AddView<SongManageView, SongManageViewModel>(services);
+            .AddView<SongManageView, SongManageViewModel>(services)
+            .AddView<AskSameSongDialog, AskSameSongDialogViewModel>(services);
     }
 
 
     private static ServiceProvider ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<PageNavigationService>();
+        services.AddSingleton<ISukiDialogManager, SukiDialogManager>();
+
+        // 所有服务注册已移至ConfigureViews方法中
         return services.BuildServiceProvider();
     }
     

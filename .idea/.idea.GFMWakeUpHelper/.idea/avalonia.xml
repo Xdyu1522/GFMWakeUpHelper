@@ -4,6 +4,8 @@
     <option name="projectPerEditor">
       <map>
         <entry key="GFMWakeUpHelper.App/App.axaml" value="GFMWakeUpHelper.App/GFMWakeUpHelper.App.csproj" />
+        <entry key="GFMWakeUpHelper.App/Dialogs/AskSameSongDialog/AskSameSongDialog.axaml" value="GFMWakeUpHelper.App/GFMWakeUpHelper.App.csproj" />
+        <entry key="GFMWakeUpHelper.App/Dialogs/ComplexDialog/ComplexDialogView.axaml" value="GFMWakeUpHelper.App/GFMWakeUpHelper.App.csproj" />
         <entry key="GFMWakeUpHelper.App/Features/AddSongView/AddSongView.axaml" value="GFMWakeUpHelper.App/GFMWakeUpHelper.App.csproj" />
         <entry key="GFMWakeUpHelper.App/Features/SongManageView/SongManageView.axaml" value="GFMWakeUpHelper.App/GFMWakeUpHelper.App.csproj" />
         <entry key="GFMWakeUpHelper.App/GFMWakeUpHelperMainView.axaml" value="GFMWakeUpHelper.App/GFMWakeUpHelper.App.csproj" />

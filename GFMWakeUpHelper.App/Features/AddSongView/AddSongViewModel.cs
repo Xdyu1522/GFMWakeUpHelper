@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using GFMWakeUpHelper.App.Dialogs.AskSameSongDialog;
 using GFMWakeUpHelper.App.Services;
@@ -13,10 +15,11 @@ using Material.Icons;
 using SukiUI.Controls;
 using SukiUI.Dialogs;
 using SukiUI.MessageBox;
+using SukiUI.Toasts;
 
 namespace GFMWakeUpHelper.App.Features.AddSongView;
 
-public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogManager dialogManager)
+public partial class AddSongViewModel(ISukiToastManager toastManager, ISukiDialogManager dialogManager)
     : PageBase("添加歌曲", MaterialIconKind.Abc, int.MinValue)
 {
     public ObservableCollection<Song> Songs { get; } = new();
@@ -37,7 +40,6 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
     }
 
     private readonly DataDbContext _dbContext = new();
-    private readonly ISukiDialogManager _dialogManager = dialogManager;
 
     private void ParseInputText()
     {
@@ -134,6 +136,14 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
                 allSongs.AddRange(existingSongs);
                 allSongs.AddRange(pendingSongs);
 
+                /*var result = await dialogManager.CreateDialog()
+                    .WithTitle("合并选项")
+                    .WithViewModel(dialog => new AskSameSongDialogViewModel(allSongs))
+                    .OfType(NotificationType.Information)
+                    /*.WithActionButton("Yes", x => { Console.WriteLine("Yes"); }, true, "Accent")
+                    .WithActionButton("No", x => { Console.WriteLine("No"); }, true, "Accent")#1#
+                    .TryShowAsync();*/
+
                 var result = await ShowAskSameSongMessageBox(allSongs);
                 switch (result)
                 {
@@ -156,6 +166,10 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
             // 成功提示
             InputSongText = string.Empty;
             Console.WriteLine($"成功添加 {songsToAdd.Count} 首歌曲到数据库，有 {songsWithSameName.Count} 组同名歌曲需要处理");
+            toastManager.CreateSimpleInfoToast()
+                .WithTitle("添加成功")
+                .WithContent($"{songsToAdd.Count + songsWithSameName.Count} 首歌曲处理成功")
+                .Queue();
         }
         catch (Exception ex)
         {
@@ -165,7 +179,7 @@ public partial class AddSongViewModel(PageNavigationService nav, ISukiDialogMana
 
     private static async Task<object?> ShowAskSameSongMessageBox(IEnumerable<Song> allSongs)
     {
-        var dataContext = new AskSameSongDialogViewModel(new SukiDialog(), allSongs);
+        var dataContext = new AskSameSongDialogViewModel(allSongs);
 
         var result = await SukiMessageBox.ShowDialog(new SukiMessageBoxHost
             {

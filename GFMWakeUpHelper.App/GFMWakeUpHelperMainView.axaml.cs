@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using SukiUI.Controls;
+using SukiUI.Toasts;
 
 namespace GFMWakeUpHelper.App;
 

@@ -16,6 +16,7 @@ using GFMWakeUpHelper.App.Services;
 using GFMWakeUpHelper.Data;
 using Microsoft.Extensions.DependencyInjection;
 using SukiUI.Dialogs;
+using SukiUI.Toasts;
 
 namespace GFMWakeUpHelper.App;
 
@@ -32,7 +33,7 @@ public partial class App : Application
         {
             db.Database.EnsureCreated();
         }
-        
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
@@ -48,7 +49,6 @@ public partial class App : Application
             var provider = ConfigureServices(services);
             DataTemplates.Add(new ViewLocator(views));
             desktop.MainWindow = views.CreateView<GFMWakeUpHelperMainViewModel>(provider) as Window;
-
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -82,10 +82,8 @@ public partial class App : Application
     {
         services.AddSingleton<PageNavigationService>();
         services.AddSingleton<ISukiDialogManager, SukiDialogManager>();
+        services.AddSingleton<ISukiToastManager, SukiToastManager>();
 
-        // 所有服务注册已移至ConfigureViews方法中
         return services.BuildServiceProvider();
     }
-    
-
 }

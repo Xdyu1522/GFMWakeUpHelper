@@ -1,20 +1,24 @@
 <sukiUi:SukiWindow xmlns="https://github.com/avaloniaui"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-              xmlns:app="clr-namespace:GFMWakeUpHelper.App"
-              xmlns:global="clr-namespace:"
-              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
-              x:Class="GFMWakeUpHelper.App.GFMWakeUpHelperMainView"
-              x:DataType="app:GFMWakeUpHelperMainViewModel"
-              Title="WakeUp管理终端"
-              BackgroundStyle="Bubble">
-        <sukiUi:SukiSideMenu IsSearchEnabled="True"
-                       ItemsSource="{Binding Pages}"
-                       SelectedItem="{Binding ActivePage}"
-                       Content="{Binding ActivePage}">
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:sukiUi="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+                   xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:app="clr-namespace:GFMWakeUpHelper.App"
+                   xmlns:global="clr-namespace:"
+                   mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+                   x:Class="GFMWakeUpHelper.App.GFMWakeUpHelperMainView"
+                   x:DataType="app:GFMWakeUpHelperMainViewModel"
+                   Title="WakeUp管理终端"
+                   BackgroundStyle="Bubble">
+    <sukiUi:SukiWindow.Hosts>
+        <sukiUi:SukiToastHost Manager="{Binding ToastManager}" />
+        <sukiUi:SukiDialogHost Manager="{Binding DialogManager}" />
+    </sukiUi:SukiWindow.Hosts>
+    <sukiUi:SukiSideMenu IsSearchEnabled="True"
+                         ItemsSource="{Binding Pages}"
+                         SelectedItem="{Binding ActivePage}"
+                         Content="{Binding ActivePage}">
         <sukiUi:SukiSideMenu.Styles>
             <Style Selector="Image.AppIcon">
                 <Setter Property="Transitions">
@@ -27,7 +31,7 @@
                 </Style>
             </Style>
         </sukiUi:SukiSideMenu.Styles>
-            <sukiUi:SukiSideMenu.ItemTemplate>
+        <sukiUi:SukiSideMenu.ItemTemplate>
             <DataTemplate>
                 <sukiUi:SukiSideMenuItem Classes="Compact" Header="{Binding DisplayName}">
                     <sukiUi:SukiSideMenuItem.Icon>

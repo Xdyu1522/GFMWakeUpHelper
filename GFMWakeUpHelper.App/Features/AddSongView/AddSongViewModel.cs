@@ -4,11 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
-using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GFMWakeUpHelper.App.Dialogs.AskSameSongDialog;
-using GFMWakeUpHelper.App.Services;
 using GFMWakeUpHelper.Data;
 using GFMWakeUpHelper.Data.Entities;
 using Material.Icons;
@@ -22,24 +20,16 @@ namespace GFMWakeUpHelper.App.Features.AddSongView;
 public partial class AddSongViewModel(ISukiToastManager toastManager, ISukiDialogManager dialogManager)
     : PageBase("添加歌曲", MaterialIconKind.Abc, int.MinValue)
 {
-    public ObservableCollection<Song> Songs { get; } = new();
+    public ObservableCollection<Song> Songs { get; } = [];
 
-    private string _inputSongText = string.Empty;
-
-    public string InputSongText
-    {
-        get => _inputSongText;
-        set
-        {
-            if (SetProperty(ref _inputSongText, value))
-            {
-                // 当文本变化时自动解析
-                ParseInputText();
-            }
-        }
-    }
+    [ObservableProperty] private string _inputSongText = string.Empty;
 
     private readonly DataDbContext _dbContext = new();
+
+    partial void OnInputSongTextChanged(string value)
+    {
+        ParseInputText();
+    }
 
     private void ParseInputText()
     {
@@ -49,7 +39,7 @@ public partial class AddSongViewModel(ISukiToastManager toastManager, ISukiDialo
             return;
         }
 
-        var lines = InputSongText.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        var lines = InputSongText.Split("\n", StringSplitOptions.RemoveEmptyEntries);
         var parsedSongs = lines.Select((line, index) =>
         {
             var song = ParseSongLine(line);

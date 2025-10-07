@@ -1,8 +1,105 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="GFMWakeUpHelper.App.Features.SongManageView.SongManageView">
-    Welcome to Avalonia!
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:GFMWakeUpHelper.App.Features.SongManageView"
+    xmlns:models="using:GFMWakeUpHelper.Data.Entities"
+    d:DataContext="{d:DesignInstance Type=vm:SongManageViewModel}"
+    mc:Ignorable="d"
+    x:Class="GFMWakeUpHelper.App.Features.SongManageView.SongManageView"
+    x:DataType="vm:SongManageViewModel"
+    x:Name="SongManageViewControl"
+    Padding="16"
+    Background="{DynamicResource SukiBackgroundBrush}">
+
+    <DockPanel>
+        <!-- ===== 顶部：搜索栏 + 工具栏 ===== -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+            <!-- 搜索框 -->
+            <TextBox
+                Width="300"
+                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <!-- 搜索按钮 -->
+            <Button
+                Content="搜索"
+                Command="{Binding SearchCommand}" />
+
+            <!-- 刷新按钮 -->
+            <Button
+                Content="刷新"
+                Command="{Binding RefreshCommand}" />
+
+            <!-- 重复歌曲检查 -->
+            <Button
+                Content="检查重复歌曲"
+                Command="{Binding CheckDuplicateCommand}" />
+
+            <!-- 右侧空隙推送 -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding RecordCount, StringFormat='共 {0} 条记录'}"
+                           Foreground="{DynamicResource SukiTextSecondaryBrush}"
+                           FontSize="13" Margin="8,0,0,0" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- ===== 中间：DataGrid 数据表 ===== -->
+        <suki:GlassCard DockPanel.Dock="Top" Padding="8" CornerRadius="8" VerticalAlignment="Stretch">
+            <DataGrid
+                ItemsSource="{Binding Songs}"
+                AutoGenerateColumns="False"
+                IsReadOnly="False"
+                HeadersVisibility="Column"
+                GridLinesVisibility="Horizontal"
+                RowBackground="{DynamicResource SukiCardBackgroundBrush}"
+                Margin="0,0,0,8"
+                x:Name="ShowSongsDataGrid">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" Width="5*" />
+                    <DataGridTextColumn Header="标题" Binding="{Binding Title, Mode=TwoWay}" Width="10*" />
+                    <DataGridTextColumn Header="歌手"
+                                        Binding="{Binding Artists, Mode=TwoWay, Converter={StaticResource ListStringToVisibilityConverter}}"
+                                        Width="10*" />
+                    <DataGridTextColumn Header="添加批次"
+                                        Binding="{Binding Batch}"
+                                        IsReadOnly="True"
+                                        Width="6*" />
+                    <DataGridTextColumn Header="添加日期"
+                                        Binding="{Binding RequestedAt, Mode=TwoWay, Converter={StaticResource DateTimeToVisibilityConverter}}"
+                                        Width="6*" />
+                    <!--<DataGridCheckBoxColumn Header="是否可用"
+                                            Binding="{Binding IsActive, Mode=OneWay}"
+                                            Width="5*" />-->
+                    <DataGridTemplateColumn Header="是否可用" Width="5*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="models:Song">
+                                <CheckBox x:Name="IsActiveCheckBox" IsChecked="{Binding IsActive, Mode=OneWay}"
+                                          Command="{Binding $parent[UserControl].((vm:SongManageViewModel)DataContext).IsActiveChangedCommand, FallbackValue={x:Null}}">
+                                    <CheckBox.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource IsActiveMultiParameterConverter}">
+                                            <Binding Path="." />
+                                            <Binding Path="IsChecked" ElementName="IsActiveCheckBox" />
+                                        </MultiBinding>
+                                    </CheckBox.CommandParameter>
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </suki:GlassCard>
+
+        <!-- ===== 底部：提交修改按钮 ===== -->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button
+                Content="提交修改"
+                Command="{Binding SubmitChangesCommand}"
+                Width="140" Height="36" />
+        </StackPanel>
+    </DockPanel>
 </UserControl>

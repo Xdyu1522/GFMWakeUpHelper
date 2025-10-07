@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -9,5 +10,19 @@ public partial class SongManageView : UserControl
     public SongManageView()
     {
         InitializeComponent();
+
+        this.AttachedToVisualTree += (_, _) =>
+        {
+            if (DataContext is SongManageViewModel vm)
+            {
+                vm.ReloadData();
+            }
+        };
+    }
+
+
+    private void IsActiveComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        Console.WriteLine("SelectionChanged");
     }
 }

@@ -6,14 +6,15 @@
              xmlns:common="clr-namespace:GFMWakeUpHelper.App.Common"
              xmlns:converters="clr-namespace:GFMWakeUpHelper.App.Converters"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-             
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
     <Application.Styles>
-        <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue"/>
+        <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue" />
     </Application.Styles>
-             
+
     <Application.Resources>
         <converters:ListStringToVisibilityConverter x:Key="ListStringToVisibilityConverter" />
         <converters:DateTimeToVisibilityConverter x:Key="DateTimeToVisibilityConverter" />
+        <converters:IsActiveMultiParameterConverter x:Key="IsActiveMultiParameterConverter" />
     </Application.Resources>
 </Application>

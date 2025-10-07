@@ -11,8 +11,6 @@ namespace GFMWakeUpHelper.App.Dialogs.AskSameSongDialog;
 
 public partial class AskSameSongDialogViewModel : ObservableObject
 {
-    private readonly ISukiDialog _dialog;
-
     public ObservableCollection<Song> PendingSongs { get; set; }
 
     [ObservableProperty] private string _dialogTitle = "这是一样的音乐吗？";

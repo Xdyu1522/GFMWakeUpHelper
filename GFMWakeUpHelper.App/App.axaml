@@ -15,6 +15,5 @@
     <Application.Resources>
         <converters:ListStringToVisibilityConverter x:Key="ListStringToVisibilityConverter" />
         <converters:DateTimeToVisibilityConverter x:Key="DateTimeToVisibilityConverter" />
-        <converters:IsActiveMultiParameterConverter x:Key="IsActiveMultiParameterConverter" />
     </Application.Resources>
 </Application>

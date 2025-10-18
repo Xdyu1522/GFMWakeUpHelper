@@ -60,7 +60,20 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" Width="5*" />
-                    <DataGridTextColumn Header="标题" Binding="{Binding Title, Mode=TwoWay}" Width="10*" />
+                    <!--
+                    <DataGridTextColumn Header="标题" Binding="{Binding Title, Mode=OneWay}" Width="10*" />
+                    -->
+                    <DataGridTemplateColumn Header="标题" Width="10*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="models:Song">
+                                <TextBox Tag="{Binding}"
+                                         Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                         Margin="5,0,0,5"
+                                         LostFocus="TitleColumn_LostFocus" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTextColumn Header="歌手"
                                         Binding="{Binding Artists, Mode=TwoWay, Converter={StaticResource ListStringToVisibilityConverter}}"
                                         Width="10*" />
@@ -77,18 +90,13 @@
                     <DataGridTemplateColumn Header="是否可用" Width="5*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="models:Song">
-                                <CheckBox x:Name="IsActiveCheckBox" IsChecked="{Binding IsActive, Mode=OneWay}"
-                                          Command="{Binding $parent[UserControl].((vm:SongManageViewModel)DataContext).IsActiveChangedCommand, FallbackValue={x:Null}}">
-                                    <CheckBox.CommandParameter>
-                                        <MultiBinding Converter="{StaticResource IsActiveMultiParameterConverter}">
-                                            <Binding Path="." />
-                                            <Binding Path="IsChecked" ElementName="IsActiveCheckBox" />
-                                        </MultiBinding>
-                                    </CheckBox.CommandParameter>
-                                </CheckBox>
+                                <CheckBox Tag="{Binding .}"
+                                          IsChecked="{Binding IsActive, Mode=TwoWay}"
+                                          IsCheckedChanged="IsActiveChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
 
             </DataGrid>

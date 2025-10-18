@@ -19,7 +19,7 @@ public class CommandsBuilder<T>(int id) where T : class, ISongEditCommand, new()
         if (property.Body is MemberExpression member && member.Member is PropertyInfo propInfo)
         {
             if (!propInfo.CanWrite)
-                throw new InvalidOperationException("Property '{propInfo.Name}' does not have a public setter");
+                throw new InvalidOperationException($"Property '{propInfo.Name}' does not have a public setter");
             propInfo.SetValue(_command, value);
         }
         else

@@ -17,40 +17,64 @@
     <DockPanel>
         <!-- ===== 顶部：搜索栏 + 工具栏 ===== -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
-            <!-- 搜索框 -->
+            <!-- 搜索区域 -->
             <TextBox
-                Width="300"
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Width="250"
+                Watermark="请输入关键字搜索"
+                Text="{Binding SearchText, Mode=TwoWay}" />
 
-            <!-- 搜索按钮 -->
-            <Button
-                Content="搜索"
-                Command="{Binding SearchCommand}" />
+            <ComboBox
+                Width="150"
+                ItemsSource="{Binding SearchFields}"
+                SelectedValue="{Binding SelectedField, Mode=TwoWay}" />
 
-            <!-- 刷新按钮 -->
             <Button
                 Content="刷新"
-                Command="{Binding RefreshCommand}" />
+                Command="{Binding RefreshCommand}"
+                ToolTip.Tip="重新加载歌曲列表，会清空命令历史" />
 
-            <!-- 重复歌曲检查 -->
+            <!-- 操作按钮组 -->
+            <Button
+                Classes="Danger"
+                Content="删除"
+                Command="{Binding DeleteSongCommand}"
+                ToolTip.Tip="删除选中的歌曲" />
+
+            <Button
+                Content="撤销"
+                Command="{Binding UndoCommand}"
+                ToolTip.Tip="撤销上一次修改操作" />
+
+            <Button
+                Content="复制"
+                Command="{Binding CopySongCommand}"
+                ToolTip.Tip="复制当前选中歌曲信息" />
+
+            <!-- 检查重复歌曲 -->
             <Button
                 Content="检查重复歌曲"
-                Command="{Binding CheckDuplicateCommand}" />
+                Command="{Binding CheckDuplicateCommand}"
+                ToolTip.Tip="检查列表中是否存在重复歌曲" />
 
             <!-- 右侧空隙推送 -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
-                <TextBlock VerticalAlignment="Center"
-                           Text="{Binding RecordCount, StringFormat='共 {0} 条记录'}"
-                           Foreground="{DynamicResource SukiTextSecondaryBrush}"
-                           FontSize="13" Margin="8,0,0,0" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding RecordCount, StringFormat='共 {0} 条记录'}"
+                    Foreground="{DynamicResource SukiTextSecondaryBrush}"
+                    FontSize="13"
+                    Margin="8,0,0,0" />
             </StackPanel>
         </StackPanel>
+
 
         <!-- ===== 中间：DataGrid 数据表 ===== -->
         <suki:GlassCard DockPanel.Dock="Top" Padding="8" CornerRadius="8" VerticalAlignment="Stretch">
             <DataGrid
                 ItemsSource="{Binding Songs}"
+                SelectedItem="{Binding SelectedSong, Mode=TwoWay}"
                 AutoGenerateColumns="False"
+                CanUserResizeColumns="True"
                 IsReadOnly="False"
                 HeadersVisibility="Column"
                 GridLinesVisibility="Horizontal"
@@ -65,7 +89,7 @@
                     -->
                     <DataGridTemplateColumn Header="标题" Width="10*">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:DataType="models:Song">
+                            <DataTemplate x:DataType="vm:SongViewModel">
                                 <TextBox Tag="{Binding}"
                                          Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                          Margin="5,0,0,5"
@@ -89,7 +113,7 @@
                                             Width="5*" />-->
                     <DataGridTemplateColumn Header="是否可用" Width="5*">
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:DataType="models:Song">
+                            <DataTemplate x:DataType="vm:SongViewModel">
                                 <CheckBox Tag="{Binding .}"
                                           IsChecked="{Binding IsActive, Mode=TwoWay}"
                                           IsCheckedChanged="IsActiveChanged" />
@@ -105,6 +129,7 @@
         <!-- ===== 底部：提交修改按钮 ===== -->
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button
+                Classes="Flat"
                 Content="提交修改"
                 Command="{Binding SubmitChangesCommand}"
                 Width="140" Height="36" />

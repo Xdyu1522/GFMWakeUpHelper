@@ -32,7 +32,6 @@ public class CommandsManager
                     $"Command {i.CommandId} can't be executed successfully due to the non-existent song id.");
             }
         }
-
         Clear();
     }
 

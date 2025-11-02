@@ -19,8 +19,8 @@ public partial class SongManageView : UserControl
             if (DataContext is SongManageViewModel vm)
             {
                 vm.ClearSearch();
-                vm.ReloadData();
                 vm.ClearCommands();
+                vm.ReloadData();
             }
         };
     }

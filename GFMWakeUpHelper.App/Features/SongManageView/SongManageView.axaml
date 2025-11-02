@@ -52,9 +52,9 @@
 
             <!-- 检查重复歌曲 -->
             <Button
-                Content="检查重复歌曲"
-                Command="{Binding CheckDuplicateCommand}"
-                ToolTip.Tip="检查列表中是否存在重复歌曲" />
+                Content="合并重名歌曲"
+                Command="{Binding CheckDuplicatesCommand}"
+                ToolTip.Tip="手动检查并合并列表中的重名歌曲" />
 
             <!-- 右侧空隙推送 -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">

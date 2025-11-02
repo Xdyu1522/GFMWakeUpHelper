@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GFMWakeUpHelper.App.Dialogs.AskSameSongDialog;
+using GFMWakeUpHelper.App.Extensions;
 using GFMWakeUpHelper.Data;
 using GFMWakeUpHelper.Data.Entities;
 using Material.Icons;
+using Serilog;
 using SukiUI.Controls;
 using SukiUI.Dialogs;
 using SukiUI.MessageBox;
@@ -134,23 +136,26 @@ public partial class AddSongViewModel(ISukiToastManager toastManager, ISukiDialo
                     .WithActionButton("No", x => { Console.WriteLine("No"); }, true, "Accent")#1#
                     .TryShowAsync();*/
 
-                var result = await ShowAskSameSongMessageBox(allSongs);
-                switch (result)
+                var result = await ShowAskSameSongDialog.ShowAskSameSongMessageBox(allSongs);
+                if (result is SukiMessageBoxResult res)
                 {
-                    case SukiMessageBoxResult.Cancel:
-                        Console.WriteLine("Canceled.");
-                        await _dbContext.Songs.AddRangeAsync(pendingSongs);
-                        break;
-                    case SukiMessageBoxResult.No:
-                        Console.WriteLine("No.");
-                        await _dbContext.Songs.AddRangeAsync(pendingSongs);
-                        break;
-                    case SukiMessageBoxResult.Yes:
-                        Console.WriteLine("Yes.");
-                        break;
+                    await res.HandleAsync(
+                        onYes: () => { Log.Information("Yes"); },
+                        onNoAsync: async () =>
+                        {
+                            Log.Information("No");
+                            await _dbContext.Songs.AddRangeAsync(pendingSongs);
+                        },
+                        onCancelAsync: async () =>
+                        {
+                            Log.Information("Canceled.");
+                            await _dbContext.Songs.AddRangeAsync(pendingSongs);
+                        }
+                    );
+                    await _dbContext.SaveChangesAsync();
+                    Log.Information("显示同名歌曲对话框: {songTitle}, 共 {allSongs.Count} 首歌曲，对话框显示结果: {result}", songTitle,
+                        songTitle.Length, res);
                 }
-
-                Console.WriteLine($"显示同名歌曲对话框: {songTitle}, 共 {allSongs.Count} 首歌曲，对话框显示结果: {result}");
             }
 
             // 成功提示
@@ -165,30 +170,6 @@ public partial class AddSongViewModel(ISukiToastManager toastManager, ISukiDialo
         {
             Console.WriteLine($"提交失败: {ex.Message}");
         }
-    }
-
-    private static async Task<object?> ShowAskSameSongMessageBox(IEnumerable<Song> allSongs)
-    {
-        var dataContext = new AskSameSongDialogViewModel(allSongs);
-
-        var result = await SukiMessageBox.ShowDialog(new SukiMessageBoxHost
-            {
-                IconPreset = SukiMessageBoxIcons.Question,
-                Header = "合并选项",
-                Content = new AskSameSongDialog
-                {
-                    DataContext = dataContext
-                },
-                ActionButtonsPreset = SukiMessageBoxButtons.YesNoCancel
-            },
-            new SukiMessageBoxOptions
-            {
-                IsTitleBarVisible = false,
-                CanResize = false
-            });
-
-
-        return result;
     }
 
     private static Song ParseSongLine(string line)
